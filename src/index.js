@@ -51,9 +51,20 @@ app.post('/login', sentEmail, verifyEmail, sentPassword, verifyPassword, async (
   res.status(HTTP_OK_STATUS).json({ token });
 });
 
-app.use(validateToken,
-  verifyToken,
-  verifyName,
+app.use(validateToken, verifyToken);
+
+app.delete('/talker/:id', async (req, res) => {
+    const data = await fs.readFile(talkerFile, 'utf-8');
+    const talkers = data && JSON.parse(data);
+    const { id } = req.params;
+
+    const talkersWithoutId = talkers.filter((talker) => Number(talker.id) !== Number(id));
+
+    await fs.writeFile(talkerFile, JSON.stringify(talkersWithoutId));
+    res.sendStatus(204);
+});
+
+app.use(verifyName,
   verifyNameSize,
   verifyAge,
   verifyAgeSize,
@@ -69,23 +80,20 @@ app.put('/talker/:id', async (req, res) => {
   const talkers = data && JSON.parse(data);
   const { id } = req.params;
 
-  const talkerUpdate = { ...req.body, id };
+  const talkerUpdate = { ...req.body, id: Number(id) };
   const talkersWithUpdate = talkers.map((talker) => {
     const update = Number(talker.id) === Number(id) ? talkerUpdate : talker;
     return update;
   });
-
   await fs.writeFile(talkerFile, JSON.stringify(talkersWithUpdate));
-  console.log(talkerUpdate);
   return res.status(HTTP_OK_STATUS).json(talkerUpdate);
 });
 
 app.post('/talker', async (req, res) => {
-  console.log('post');
   const data = await fs.readFile(talkerFile, 'utf-8');
   const talker = data && JSON.parse(data);
-  console.log('POST BODY', req.body);
-  const newTalker = { ...req.body, id: talker.length + 1 };
+  const { id } = talker[talker.length - 1];
+  const newTalker = { ...req.body, id: id + 1 };
   const newTalkerFile = [...talker, newTalker];
   await fs.writeFile(talkerFile, JSON.stringify(newTalkerFile));
   return res.status(201).json(newTalker);
