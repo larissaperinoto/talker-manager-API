@@ -23,6 +23,16 @@ const PORT = '3000';
 
 const talkerFile = path.resolve(__dirname, './talker.json');
 
+app.get('/talker/search',
+validateToken,
+verifyToken, async (req, res) => {
+  const { q } = req.query;
+  const data = await fs.readFile(talkerFile, 'utf-8');
+  const talkers = data && JSON.parse(data);
+  const search = talkers.filter((talker) => talker.name.includes(q));
+  res.status(HTTP_OK_STATUS).json(search);
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const data = await fs.readFile(talkerFile, 'utf-8');
