@@ -63,13 +63,32 @@ app.use(validateToken,
   verifyWatchedAtFormat,
   verifyRateSize);
 
+app.put('/talker/:id', async (req, res) => {
+  console.log('PUT');
+  const data = await fs.readFile(talkerFile, 'utf-8');
+  const talkers = data && JSON.parse(data);
+  const { id } = req.params;
+
+  const talkerUpdate = { ...req.body, id };
+  const talkersWithUpdate = talkers.map((talker) => {
+    const update = Number(talker.id) === Number(id) ? talkerUpdate : talker;
+    return update;
+  });
+
+  await fs.writeFile(talkerFile, JSON.stringify(talkersWithUpdate));
+  console.log(talkerUpdate);
+  return res.status(HTTP_OK_STATUS).json(talkerUpdate);
+});
+
 app.post('/talker', async (req, res) => {
-  const data = await fs.readFile(path.resolve(__dirname, './talker.json'), 'utf-8');
+  console.log('post');
+  const data = await fs.readFile(talkerFile, 'utf-8');
   const talker = data && JSON.parse(data);
+  console.log('POST BODY', req.body);
   const newTalker = { ...req.body, id: talker.length + 1 };
   const newTalkerFile = [...talker, newTalker];
-  await fs.writeFile(path.resolve(__dirname, './talker.json'), JSON.stringify(newTalkerFile));
-  res.status(201).json(newTalker);
+  await fs.writeFile(talkerFile, JSON.stringify(newTalkerFile));
+  return res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {
