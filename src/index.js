@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
 
+const { sentEmail, verifyEmail } = require('./middlewares/validateEmail');
+const { sentPassword, verifyPassword } = require('./middlewares/validatePassword');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -32,16 +35,10 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+app.post('/login', sentEmail, verifyEmail, sentPassword, verifyPassword, async (req, res) => {
   const token = Math.random().toFixed(16).substr(2);
-
-  if (email && password) {
-    res.status(HTTP_OK_STATUS).json({ token });
-  }
+  res.status(HTTP_OK_STATUS).json({ token });
 });
-
-console.log(Math.random().toFixed(16).substr(2));
 
 app.listen(PORT, () => {
   console.log('Online');
