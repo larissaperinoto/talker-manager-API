@@ -32,6 +32,17 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  const token = Math.random().toFixed(16).substr(2);
+
+  if (email && password) {
+    res.status(HTTP_OK_STATUS).json({ token });
+  }
+});
+
+console.log(Math.random().toFixed(16).substr(2));
+
 app.listen(PORT, () => {
   console.log('Online');
 });
