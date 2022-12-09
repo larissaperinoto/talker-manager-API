@@ -1,6 +1,6 @@
 # Talker Manager API
 
-A [Trybe](https://www.betrybe.com/) é uma escola de tecnologia com foco em formação de Desenvolvedores Web e o projeto Talker Manager foi proposto como atividade de aprimoramento dos estudos sobre desenvolvimento back-end onde iniciamos a utilização do NodeJS. 
+A [Trybe](https://www.betrybe.com/) é uma escola de tecnologia com foco em formação de Desenvolvedores Web e o projeto Talker Manager foi proposto como atividade de aprimoramento dos estudos sobre desenvolvimento back-end onde iniciamos a utilização do NodeJS.
 
 ## Objetivo
 
@@ -22,33 +22,33 @@ Neste projeto não é utilizado um banco de dados, portanto, utilizou-se o módu
 Para executar a aplicação inicie realizando o clone deste repositório com o comando abaixo.
 
       git clone git@github.com:larissaperinoto/talker-manager-API.git
-    
+
 Navegue até a raíz do projeto.
 
       cd talker-manager-API/
-    
+
 <details>
-   <summary><strong>Rodando a aplicação com o Docker</strong></summary> 
+   <summary><strong>Rodando a aplicação com o Docker</strong></summary>
   </br>
-  
+
    Na pasta app do projeto, suba o container <strong>talker_manager</strong> utilizando o docker-compose.yml. Utilize o comando abaixo.
 
         docker-compose up -d
-      
+
    Entre no terminal do container
-   
+
         docker exec -it talker_manager bash
-        
+
    Instale as depedências do projeto
-   
+
         npm install
-        
+
    Inicie o servidor
-   
-        npm start
-  
+
+        npm run dev
+
 </details>
 
 ---
- 
+
 Desenvolvido por [Larissa Perinoto](www.linkedin.com/in/larissaperinoto), © 2022.
